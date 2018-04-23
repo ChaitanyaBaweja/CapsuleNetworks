@@ -34,10 +34,12 @@ parser.add_argument('--output_dim', dest='output_dim', default=10, help='output 
 parser.add_argument('--data', dest='data', default='mnist', help='cats image train path')
 parser.add_argument('--root_path', dest='root_path', default='./data/', help='cats image train path')
 
-parser.add_argument('--epochs', dest='epochs', default=500, help='total number of epochs')
+parser.add_argument('--epochs', dest='epochs', default=1000, help='total number of epochs')
+parser.add_argument('--decay_steps', dest='decay_steps', default=2000, help='total number of epochs')
+parser.add_argument('--decay_rate', dest='decay_rate', default=0.96, help='total number of epochs')
 parser.add_argument('--batch_size', dest='batch_size', default=64, help='batch size')
 
-parser.add_argument('--learning_rate', dest='learning_rate', default=1e-5, help='learning rate of the optimizer')
+parser.add_argument('--learning_rate', dest='learning_rate', default=1e-4, help='learning rate of the optimizer')
 parser.add_argument('--momentum', dest='momentum', default=0.5, help='momentum of the optimizer')
 
 parser.add_argument('--m_plus', dest='m_plus', default=0.9, help='m_plus')
@@ -62,18 +64,18 @@ args = parser.parse_args()
 def main(_):
     run_config = tf.ConfigProto()
     run_config.gpu_options.allow_growth = True
-    
+
     with tf.Session(config=run_config) as sess:
         #print used dataset
-        print "Dataset: %s"%args.data
-        print "Model: %s"%args.model
+        print("Dataset: %s"%args.data)
+        print("Model: %s"%args.model)
 
         if args.model == "baseline_network":
             model = baseline_network(args)
         elif args.model == "capsule_dynamic":
             model = capsule_dynamic(args)
         elif args.model == "capsule_em":
-            model = capsule_em(args)        
+            model = capsule_em(args)
 
 
         #create graph and checkpoints folder if they don't exist
@@ -81,7 +83,7 @@ def main(_):
             os.makedirs(args.checkpoints_path)
         if not os.path.exists(args.graph_path):
             os.makedirs(args.graph_path)
-            
+
         #create a subfolder in checkpoints folder
         args.checkpoints_path = os.path.join(args.checkpoints_path, args.model + "/")
         if not os.path.exists(args.checkpoints_path):
@@ -94,10 +96,10 @@ def main(_):
         manager = Manager(args)
 
         if args.is_train:
-            print 'Start Training...'
+            print('Start Training...')
             manager.train(sess, model)
         else:
-            print 'Start Testing...'
+            print('Start Testing...')
             manager.test(sess, model)
 
 main(args)
