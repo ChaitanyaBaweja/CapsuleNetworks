@@ -15,9 +15,9 @@ class baseline_network():
 		self.input_width = args.input_width
 		self.input_height = args.input_height
 		self.input_channel = args.input_channel
-
+		self.decay_steps=args.decay_steps
+		self.decay_rate=args.decay_rate
 		self.output_dim = args.output_dim
-
 		self.batch_size = args.batch_size
 		self.learning_rate = args.learning_rate
 		self.momentum = args.momentum
@@ -36,7 +36,7 @@ class baseline_network():
 		self.classifier, self.classifier_logits = self.model(self.X, name="classifier")
 
 		self.trainable_vars = tf.trainable_variables()
-		print "number of parameters: ", count_param(self.trainable_vars)
+		print("number of parameters: ", count_param(self.trainable_vars))
 
 	def build_loss(self):
 		self.loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.Y, logits=self.classifier_logits))
@@ -74,10 +74,10 @@ class baseline_network():
 											 weights_initializer=tf.contrib.layers.xavier_initializer(),
 											 activation_fn=tf.nn.relu,
 											 scope="conv3"
-											)	
+											)
 
 			conv3 = batch_norm(conv3, name="bn3")
-			
+
 			flattened = tf.contrib.layers.flatten(conv3)
 			fc1 = tf.contrib.layers.fully_connected(flattened, num_outputs=328,
 													weights_initializer=tf.contrib.layers.xavier_initializer(),
@@ -95,11 +95,7 @@ class baseline_network():
 													weights_initializer=tf.contrib.layers.xavier_initializer(),
 													scope="fc3"
 													)
-			
+
 			output = tf.nn.softmax(fc3)
 
 			return output, fc3
-
-
-
-
