@@ -1,3 +1,10 @@
+##################################################
+## Project: CapsuleNetworks
+## Script purpose: Main file to act as interface
+## Date: 21st April 2018
+## Author: Chaitanya Baweja, Imperial College London
+##################################################
+
 import tensorflow as tf
 import os
 import numpy as np
@@ -6,12 +13,15 @@ import argparse
 import sys
 
 sys.path.insert(0, './models')
-from baseline_network import baseline_network
+from convolution_network import convolution_network
 from capsule_dynamic import capsule_dynamic
 from manager import Manager
-from capsule_em import capsule_em
 #============================================================================================
-
+'''
+To covert a string into a boolean value
+v: string to be converted
+Returns bool or error
+'''
 def str2bool(v):
     if v.lower() in ('yes', 'true', 't', 'y', '1', True):
         return True
@@ -20,6 +30,7 @@ def str2bool(v):
     else:
         raise argparse.ArgumentTypeError('Boolean value expected.')
 
+#use a parser to incorporate inputs
 parser = argparse.ArgumentParser(description='')
 
 parser.add_argument('--model', dest='model', default="capsule_dynamic", help='model type')
@@ -33,7 +44,6 @@ parser.add_argument('--output_dim', dest='output_dim', default=10, help='output 
 #Training Settings
 parser.add_argument('--data', dest='data', default='mnist', help='cats image train path')
 parser.add_argument('--root_path', dest='root_path', default='./data/', help='cats image train path')
-
 parser.add_argument('--epochs', dest='epochs', default=1000, help='total number of epochs')
 parser.add_argument('--decay_steps', dest='decay_steps', default=2000, help='total number of epochs')
 parser.add_argument('--decay_rate', dest='decay_rate', default=0.96, help='total number of epochs')
@@ -62,6 +72,7 @@ args = parser.parse_args()
 #============================================================================================
 
 def main(_):
+
     run_config = tf.ConfigProto()
     run_config.gpu_options.allow_growth = True
 
@@ -70,8 +81,8 @@ def main(_):
         print("Dataset: %s"%args.data)
         print("Model: %s"%args.model)
 
-        if args.model == "baseline_network":
-            model = baseline_network(args)
+        if args.model == "convolution_network":
+            model = convolution_network(args)
         elif args.model == "capsule_dynamic":
             model = capsule_dynamic(args)
         elif args.model == "capsule_em":
@@ -103,5 +114,3 @@ def main(_):
             manager.test(sess, model)
 
 main(args)
-
-#Still Working....

@@ -13,6 +13,7 @@ class Manager():
 		self.checkpoints_path = args.checkpoints_path
 		self.graph_path = args.graph_path
 		self.epochs = args.epochs
+		#global step to be used for learning rate
 		self._global_step = tf.get_variable(
              'global_step', [],
              initializer=tf.constant_initializer(0),
@@ -90,7 +91,7 @@ class Manager():
 
 	#function to start testing
 	def test(self, sess, model):
-
+		#using the saved module
 		saver = tf.train.Saver()
 		last_ckpt = tf.train.latest_checkpoint(self.checkpoints_path)
 		saver.restore(sess, last_ckpt)

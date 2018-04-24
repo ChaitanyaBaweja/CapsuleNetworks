@@ -2,6 +2,7 @@ import tensorflow as tf
 import numpy as np
 import os
 
+#batch_norm operations
 def batch_norm(input, name="batch_norm"):
 	with tf.variable_scope(name) as scope:
 		input = tf.identity(input)
@@ -14,16 +15,16 @@ def batch_norm(input, name="batch_norm"):
 
 		normalized_batch = tf.nn.batch_normalization(input, mean, variance, offset, scale, variance_epsilon=1e-5)
 
-		return normalized_batch 
+		return normalized_batch
 
-
+#max pool operation
 def max_pool(inputs, kernel_size=3, stride=2, scope=None, name=""):
-  return tf.nn.max_pool(inputs, 
+  return tf.nn.max_pool(inputs,
                        ksize=[1, kernel_size, kernel_size, 1],
                        strides=[1, stride, stride, 1],
                        padding='SAME')
-  
 
+#Function to count parameters
 def count_param(total_param):
 	total_num = 0
 	for v in total_param:
