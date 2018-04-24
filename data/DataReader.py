@@ -7,7 +7,7 @@ import math
 import cv2
 import pickle
 
-from norb_reader import *
+import norb_reader
 
 def place_random(trainX):
 	#randomly place 28x28 mnist image on 40x40 background
