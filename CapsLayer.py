@@ -11,7 +11,7 @@ class CapsLayer(object):
 
 #Functions for dynamic routing
 	def dm_primaryCaps(self,
-					   input, 
+					   input,
 					   kernel=9,
 					   stride=2,
 					   num_outputs=32,
@@ -58,7 +58,7 @@ class CapsLayer(object):
 			weight = tf.tile(weight, multiples=multiples)
 			weight = tf.reshape(weight, [1, input.shape[1].value, out_num, input.shape[3].value, vec_len])
 			weight = tf.tile(weight, [self.batch_size, 1, 1, 1, 1])
-			
+
 			#tile tensors to match dimensions
 			input = tf.tile(input, [1, 1, out_num, 1, 1])
 
@@ -96,9 +96,9 @@ class CapsLayer(object):
 		squashed = scalar_factor * vec
 		return squashed
 
-	#functions for EM routing 
+	#functions for EM routing
 	def em_primaryCaps(self,
-					input, 
+					input,
 					kernel=9,
 					stride=2,
 					num_outputs=32,
@@ -108,7 +108,7 @@ class CapsLayer(object):
 			primaryCaps_pose = tf.contrib.layers.conv2d(input, num_outputs*(4*4), kernel, stride,
 												   		padding="SAME"
 												   		)
-			primaryCaps_pose = tf.reshape(primaryCaps_pose, 
+			primaryCaps_pose = tf.reshape(primaryCaps_pose,
 										   (self.batch_size, input.shape[1].value, input.shape[2].value, num_outputs, 4*4))
 
 			primaryCaps_actv = tf.contrib.layers.conv2d(input, num_outputs, kernel, stride,
@@ -122,7 +122,7 @@ class CapsLayer(object):
 			#concatenate pose and activation as one capsule
 			primaryCaps = tf.concat([primaryCaps_pose, primaryCaps_actv], axis=4)
 			primaryCaps = tf.reshape(primaryCaps, (self.batch_size, input.shape[1].value, input.shape[2].value, -1))
-		
+
 
 		return primaryCaps_pose, primaryCaps_actv
 
@@ -143,7 +143,7 @@ class CapsLayer(object):
 
 			caps_pose = tf.reshape(caps_pose, shape=[-1, 14, 14, 32, 4, 4])
 			caps_actv = tf.reshape(caps_actv, shape=[-1, 14, 14, 32])
-			
+
 
 			hk_offsets = [
 						 [(h_offset + k_offset) for k_offset in range(0, shape[0])] for h_offset in
@@ -165,7 +165,7 @@ class CapsLayer(object):
 
 			inputs_poses_patches = tf.tile(
 			  inputs_poses_patches, [1, 1, 1, 1, 1, 1, shape[-1], 1, 1], name='workaround_broadcasting_issue'
-			)		
+			)
 
 			weight_kernel = tf.get_variable("Weight", shape=[3, 3, 32, 32, 4, 4], dtype=tf.float32,
 											initializer=tf.contrib.layers.xavier_initializer())
@@ -190,12 +190,12 @@ class CapsLayer(object):
 			], name='votes'
 			)
 
-			print inputs_poses_patches
-			print hk_offsets
-			print wk_offsets
-			print votes
-			print "pose:", caps_pose
-			print "actv:", caps_actv
+			print(inputs_poses_patches)
+			print(hk_offsets)
+			print(wk_offsets)
+			print(votes)
+			print("pose:", caps_pose)
+			print("actv:", caps_actv)
 			#filter shape = [kernel, kernel, 32, 32, 4, 4]
 			input('Done')
 			#======================================================================
@@ -206,13 +206,13 @@ class CapsLayer(object):
 			weight = tf.get_variable("Weight", shape=[1, input.shape[1].value, out_num, input.shape[3].value, vec_len], dtype=tf.float32,
 									 initializer=tf.contrib.layers.xavier_initializer())
 									 # initializer=tf.random_normal_initializer(stddev=0.01))
-									 
+
 
 			input = tf.tile(input, [1, 1, out_num, 1, 1])
 			weight = tf.tile(weight, [self.batch_size, 1, 1, 1, 1])
 
 			u_hat = tf.matmul(weight, input, transpose_a=True)
-			
+
 			u_hat_stopped = tf.stop_gradient(u_hat, name='stop_gradient')
 
 			for routenum in range(routing):
