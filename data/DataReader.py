@@ -5,7 +5,7 @@ from glob import glob
 import os
 import math
 import cv2
-import cPickle
+import pickle
 
 from norb_reader import *
 
