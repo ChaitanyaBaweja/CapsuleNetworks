@@ -49,7 +49,7 @@ class capsule_dynamic():
 		self.CapsNetwork(self.X, name="capsnet")
 
 		self.trainable_vars = tf.trainable_variables()
-		print "number of parameters: ", count_param(self.trainable_vars)
+		print("number of parameters: ", count_param(self.trainable_vars))
 
 	#implementation of dynamic routing between capsules
 	def CapsNetwork(self, input_image, name):
@@ -58,16 +58,16 @@ class capsule_dynamic():
 											 9, 1, padding="VALID",
 											 activation_fn=tf.nn.relu,
 											 scope="conv1"
-											)			
-			
+											)
+
 			capsule = CapsLayer(self.batch_size)
-			caps1 = capsule.dm_primaryCaps(conv1, 
+			caps1 = capsule.dm_primaryCaps(conv1,
 										   kernel=9,
 										   stride=2,
 										   num_outputs=32,
 										   vec_length=8,
 										   name="primarycaps")
-		
+
 
 			caps2 = capsule.dm_digitCaps(caps1,
 									     num_outputs=self.output_dim,
@@ -96,16 +96,16 @@ class capsule_dynamic():
 				fc1 = tf.contrib.layers.fully_connected(vector_j, num_outputs=512,
 														weights_initializer=tf.contrib.layers.xavier_initializer()
 														)
-				
+
 
 				fc2 = tf.contrib.layers.fully_connected(fc1, num_outputs=1024,
 														weights_initializer=tf.contrib.layers.xavier_initializer()
 														)
-				
 
-				self.decoded = tf.contrib.layers.fully_connected(fc2, num_outputs=self.input_width*self.input_height*self.input_channel, 
+
+				self.decoded = tf.contrib.layers.fully_connected(fc2, num_outputs=self.input_width*self.input_height*self.input_channel,
 																 weights_initializer=tf.contrib.layers.xavier_initializer(),
-																 activation_fn=tf.sigmoid)			
+																 activation_fn=tf.sigmoid)
 
 				#deconv version(optional)
 				# vector_j = tf.reshape(self.masked_v, shape=(self.batch_size, -1))
@@ -113,15 +113,15 @@ class capsule_dynamic():
 				# 										weights_initializer=tf.contrib.layers.xavier_initializer()
 				# 										)
 				# deconv_ = tf.reshape(fc1, shape=(self.batch_size, self.input_width/2, self.input_height/2, self.input_channel))
-				# self.decoded = tf.layers.conv2d_transpose(deconv_, 
-				# 									filters=3, 
+				# self.decoded = tf.layers.conv2d_transpose(deconv_,
+				# 									filters=3,
 				# 									kernel_size=5,
 				# 									strides=(2,2),
 				# 									padding='SAME',
 				# 									activation=tf.sigmoid)
 
 				self.rec_img = tf.reshape(self.decoded, shape=(self.batch_size, self.input_width, self.input_height, self.input_channel))
-		
+
 
 	def build_loss(self):
 		#loss function as decribed in the paper
@@ -140,7 +140,7 @@ class capsule_dynamic():
 
 		self.loss = self.margin_loss + self.reg_scale * self.reconstruction_err
 
-		#to check accuracy		
+		#to check accuracy
 		gt = tf.cast(tf.argmax(self.Y, axis=1), tf.int32)
 		pred = self.argmax_idx
 		correct_prediction = tf.equal(pred, gt)
