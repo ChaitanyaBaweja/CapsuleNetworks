@@ -12,12 +12,14 @@ import scipy.misc
 import argparse
 import sys
 
+#in cases where python is unable to detect your files
+sys.path.insert(0, './models')
+
 from convolution_network import convolution_network
 from capsule_dynamic import capsule_dynamic
 from manager import Manager
 
-#in cases where python is unable to detect your files
-sys.path.insert(0, './models')
+
 
 #============================================================================================
 

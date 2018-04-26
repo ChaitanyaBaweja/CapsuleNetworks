@@ -70,19 +70,20 @@ class Manager():
 
 		while epoch < self.epochs:
 			# Record summaries and test-set accuracy
-			if epoch%10 ==0:
+			if overall_step%10 ==0:
 				summary, loss, acc, _ = sess.run([all_summary,
 												  model.loss,
 												  model.accuracy,
 												  optimizer])
 				test_writer.add_summary(summary, overall_step)
 				print("Epoch [%d] step [%d] Training Loss: [%.4f] Accuracy: [%.4f]" % (epoch, step, loss, acc))
-				else:  # Record train set summaries, and train
-					summary, loss, _ = sess.run([all_summary,
-													  model.loss,
-													  optimizer])
-					test_writer.add_summary(summary, overall_step)
-					print("Epoch [%d] step [%d] Training Loss: [%.4f]" % (epoch, step, loss))
+			else:
+				# Record train set summaries, and train
+				summary, loss, _ = sess.run([all_summary,
+												  model.loss,
+												  optimizer])
+				test_writer.add_summary(summary, overall_step)
+				print("Epoch [%d] step [%d] Training Loss: [%.4f]" % (epoch, step, loss))
 
 
 			step += 1
