@@ -82,7 +82,8 @@ class Manager():
 				summary, loss, _ = sess.run([all_summary,
 												  model.loss,
 												  optimizer])
-				test_writer.add_summary(summary, overall_step)
+				t
+				train_writer.add_summary(summary, overall_step)
 				print("Epoch [%d] step [%d] Training Loss: [%.4f]" % (epoch, step, loss))
 
 
