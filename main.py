@@ -54,7 +54,7 @@ parser.add_argument('--root_path', dest='root_path', default='./data/', help='pa
 parser.add_argument('--epochs', dest='epochs', default=1000, help='total number of epochs')
 parser.add_argument('--batch_size', dest='batch_size', default=64, help='batch size')
 
-parser.add_argument('--learning_rate', dest='learning_rate', default=1e-3, help='learning rate of the optimizer')
+parser.add_argument('--learning_rate', dest='learning_rate', default=1e-4, help='learning rate of the optimizer')
 parser.add_argument('--decay_steps', dest='decay_steps', default=2000, help='decay steps for learning rate')
 parser.add_argument('--decay_rate', dest='decay_rate', default=0.96, help='decay_rate to be used with learning rate')
 parser.add_argument('--momentum', dest='momentum', default=0.5, help='momentum of the optimizer')
