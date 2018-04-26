@@ -55,16 +55,7 @@ class Manager():
 		threads = tf.train.start_queue_runners(sess=sess, coord=coord)
 
 
-		if hasattr(model, 'rec_img_summary'):
-			all_summary = tf.summary.merge([model.img_summary,
-											model.rec_img_summary,
-											model.loss_summary,
-											model.acc_summary])
-		else:
-			all_summary = tf.summary.merge([model.img_summary,
-											model.loss_summary,
-											model.acc_summary])
-
+		all_summary = tf.summary.merge_all()
 		train_writer = tf.summary.FileWriter(self.graph_path+'/train', sess.graph)
 		test_writer = tf.summary.FileWriter(self.graph_path + '/test')
 
