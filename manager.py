@@ -31,6 +31,7 @@ class Manager():
 		    decay_rate=self.decay_rate)
 
 		learning_rate = tf.maximum(learning_rate, 1e-6)
+		tf.summary.scalar('learning_rate', learning_rate)
 		#optimizer
 		optimizer = tf.train.AdamOptimizer(learning_rate, name="AdamOptimizer").minimize(model.loss, var_list=model.trainable_vars,global_step=self._global_step)
 
@@ -64,16 +65,25 @@ class Manager():
 											model.loss_summary,
 											model.acc_summary])
 
-		writer = tf.summary.FileWriter(self.graph_path, sess.graph)
+		train_writer = tf.summary.FileWriter(self.graph_path+'/train', sess.graph)
+		test_writer = tf.summary.FileWriter(self.graph_path + '/test')
 
 		while epoch < self.epochs:
-			summary, loss, acc, _ = sess.run([all_summary,
-											  model.loss,
-											  model.accuracy,
-											  optimizer])
-			writer.add_summary(summary, overall_step)
+			# Record summaries and test-set accuracy
+			if epoch%10 ==0:
+				summary, loss, acc, _ = sess.run([all_summary,
+												  model.loss,
+												  model.accuracy,
+												  optimizer])
+				test_writer.add_summary(summary, overall_step)
+				print("Epoch [%d] step [%d] Training Loss: [%.4f] Accuracy: [%.4f]" % (epoch, step, loss, acc))
+				else:  # Record train set summaries, and train
+					summary, loss, _ = sess.run([all_summary,
+													  model.loss,
+													  optimizer])
+					test_writer.add_summary(summary, overall_step)
+					print("Epoch [%d] step [%d] Training Loss: [%.4f]" % (epoch, step, loss))
 
-			print("Epoch [%d] step [%d] Training Loss: [%.4f] Accuracy: [%.4f]" % (epoch, step, loss, acc))
 
 			step += 1
 			overall_step += 1
