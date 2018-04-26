@@ -26,6 +26,7 @@ class convolution_network():
 		self.X, self.Y, self.data_count = load_data(args)
 		self.build_model()
 		self.build_loss()
+		self.build_accuracy()
 
 		#summary
 		self.img_summary = tf.summary.image("input", self.X, max_outputs=5)
@@ -41,6 +42,7 @@ class convolution_network():
 	def build_loss(self):
 		self.loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(labels=self.Y, logits=self.classifier_logits))
 
+	def build_accuracy(self):
 		#to check accuracy
 		gt = tf.argmax(self.Y, axis=1)
 		pred = tf.argmax(self.classifier, axis=1)
