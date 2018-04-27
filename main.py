@@ -51,7 +51,7 @@ parser.add_argument('--output_dim', dest='output_dim', default=10, help='output 
 #Training Settings
 parser.add_argument('--data', dest='data', default='mnist', help='which dataset to use')
 parser.add_argument('--root_path', dest='root_path', default='./data/', help='path of dataset')
-parser.add_argument('--epochs', dest='epochs', default=1000, help='total number of epochs')
+parser.add_argument('--epochs', dest='epochs', default=250, help='total number of epochs')
 parser.add_argument('--batch_size', dest='batch_size', default=64, help='batch size')
 
 parser.add_argument('--learning_rate', dest='learning_rate', default=1e-4, help='learning rate of the optimizer')
