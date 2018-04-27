@@ -84,7 +84,7 @@ def main(_):
     #used for working with gpus and interoperability of code to cases where gpu is not available
     run_config = tf.ConfigProto(allow_soft_placement=True, log_device_placement=True)
     #rather than allocating full memory, use as much required
-    run_config.gpu_options.allow_growth = True
+    #run_config.gpu_options.allow_growth = True
 
     #defining a tensorflow session
     with tf.Session(config=run_config) as sess:
