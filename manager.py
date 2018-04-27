@@ -54,8 +54,8 @@ class Manager():
 		coord = tf.train.Coordinator()
 		threads = tf.train.start_queue_runners(sess=sess, coord=coord)
 
-		for var in tf.trainable_variables():
-			tf.summary.histogram(var.name, var)
+		#for var in tf.trainable_variables():
+			#tf.summary.histogram(var.name, var)
 		all_summary = tf.summary.merge_all()
 		train_writer = tf.summary.FileWriter(self.graph_path+'/train', sess.graph)
 		test_writer = tf.summary.FileWriter(self.graph_path + '/test')
